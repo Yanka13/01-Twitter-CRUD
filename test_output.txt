@@ -1,0 +1,573 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.6, pytest-7.2.0, pluggy-1.0.0 -- /Users/yannisbouhamou/code/Yanka13/data-engineering-challenges/02-Database-Fundamentals/04-Backend-and-Database-Management/01-Twitter-CRUD/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/yannisbouhamou/code/Yanka13/data-engineering-challenges/02-Database-Fundamentals/04-Backend-and-Database-Management/01-Twitter-CRUD, configfile: pyproject.toml
+plugins: anyio-3.6.2
+collecting ... collected 10 items
+
+tests/test_db.py::test_read_root PASSED                                  [ 10%]
+tests/test_db.py::test_create_user PASSED                                [ 20%]
+tests/test_db.py::test_read_users PASSED                                 [ 30%]
+tests/test_db.py::test_read_user PASSED                                  [ 40%]
+tests/test_db.py::test_create_tweet FAILED                               [ 50%]
+tests/test_db.py::test_read_tweets FAILED                                [ 60%]
+tests/test_db.py::test_read_user_tweets FAILED                           [ 70%]
+tests/test_db.py::test_create_like FAILED                                [ 80%]
+tests/test_db.py::test_read_users_likes FAILED                           [ 90%]
+tests/test_db.py::test_read_users_likedtweets FAILED                     [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_create_tweet _______________________________
+
+    @pytest.mark.tweets
+    def test_create_tweet():
+>       response = client.post("/users/1/tweets/", json={"text": "test"})
+
+tests/test_db.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:635: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Tweet
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+_______________________________ test_read_tweets _______________________________
+
+    @pytest.mark.tweets
+    def test_read_tweets():
+>       response = client.get("/tweets/")
+
+tests/test_db.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:600: in get
+    return self.request("GET", url, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Tweet
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+____________________________ test_read_user_tweets _____________________________
+
+    @pytest.mark.tweets
+    def test_read_user_tweets():
+>       response = client.get("/users/1/tweets/")
+
+tests/test_db.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:600: in get
+    return self.request("GET", url, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Tweet
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+_______________________________ test_create_like _______________________________
+
+    @pytest.mark.likes
+    def test_create_like():
+>       response = client.post("/users/1/likes/", json={"tweet_id": 1})
+
+tests/test_db.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:635: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Like
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+____________________________ test_read_users_likes _____________________________
+
+    @pytest.mark.likes
+    def test_read_users_likes():
+>       response = client.get("/users/1/likes/")
+
+tests/test_db.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:600: in get
+    return self.request("GET", url, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Like
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+_________________________ test_read_users_likedtweets __________________________
+
+    @pytest.mark.likes
+    def test_read_users_likedtweets():
+>       response = client.get("/users/1/liked_tweets/")
+
+tests/test_db.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.10/site-packages/requests/sessions.py:600: in get
+    return self.request("GET", url, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:473: in request
+    return super().request(
+.venv/lib/python3.10/site-packages/requests/sessions.py:587: in request
+    resp = self.send(prep, **send_kwargs)
+.venv/lib/python3.10/site-packages/requests/sessions.py:701: in send
+    r = adapter.send(request, **kwargs)
+.venv/lib/python3.10/site-packages/starlette/testclient.py:267: in send
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/testclient.py:264: in send
+    portal.call(self.app, scope, receive, send)
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:283: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:458: in result
+    return self.__get_result()
+../../../../../../.pyenv/versions/3.10.6/lib/python3.10/concurrent/futures/_base.py:403: in __get_result
+    raise self._exception
+.venv/lib/python3.10/site-packages/anyio/from_thread.py:219: in _call_func
+    retval = await retval
+.venv/lib/python3.10/site-packages/fastapi/applications.py:270: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/applications.py:124: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:184: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/errors.py:162: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:75: in __call__
+    raise exc
+.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py:64: in __call__
+    await self.app(scope, receive, sender)
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:21: in __call__
+    raise e
+.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:680: in __call__
+    await route.handle(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:275: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.10/site-packages/starlette/routing.py:65: in app
+    response = await func(request)
+.venv/lib/python3.10/site-packages/fastapi/routing.py:253: in app
+    content = await serialize_response(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def serialize_response(
+        *,
+        field: Optional[ModelField] = None,
+        response_content: Any,
+        include: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        exclude: Optional[Union[SetIntStr, DictIntStrAny]] = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        is_coroutine: bool = True,
+    ) -> Any:
+        if field:
+            errors = []
+            response_content = _prepare_response_content(
+                response_content,
+                exclude_unset=exclude_unset,
+                exclude_defaults=exclude_defaults,
+                exclude_none=exclude_none,
+            )
+            if is_coroutine:
+                value, errors_ = field.validate(response_content, {}, loc=("response",))
+            else:
+                value, errors_ = await run_in_threadpool(
+                    field.validate, response_content, {}, loc=("response",)
+                )
+            if isinstance(errors_, ErrorWrapper):
+                errors.append(errors_)
+            elif isinstance(errors_, list):
+                errors.extend(errors_)
+            if errors:
+>               raise ValidationError(errors, field.type_)
+E               pydantic.error_wrappers.ValidationError: 1 validation error for Tweet
+E               response
+E                 none is not an allowed value (type=type_error.none.not_allowed)
+
+.venv/lib/python3.10/site-packages/fastapi/routing.py:139: ValidationError
+=========================== short test summary info ============================
+FAILED tests/test_db.py::test_create_tweet - pydantic.error_wrappers.Validati...
+FAILED tests/test_db.py::test_read_tweets - pydantic.error_wrappers.Validatio...
+FAILED tests/test_db.py::test_read_user_tweets - pydantic.error_wrappers.Vali...
+FAILED tests/test_db.py::test_create_like - pydantic.error_wrappers.Validatio...
+FAILED tests/test_db.py::test_read_users_likes - pydantic.error_wrappers.Vali...
+FAILED tests/test_db.py::test_read_users_likedtweets - pydantic.error_wrapper...
+========================= 6 failed, 4 passed in 0.71s ==========================
