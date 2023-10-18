@@ -16,7 +16,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     tweets = relationship("Tweet", back_populates="owner") # allows query "user.tweet
     
-class Tweet():  # YOUR CODE HERE: Please add "Base" inheritence to this class when you start working on this class, to allow `alembic revision --autogenerate` to take into account this model
+class Tweet(Base):  # YOUR CODE HERE: Please add "Base" inheritence to this class when you start working on this class, to allow `alembic revision --autogenerate` to take into account this model
     """Class to represent the tweets table"""
 
     # Table name
